@@ -10,21 +10,21 @@ export default function Dashboard() {
 
   const fetchStats = async () => {
     const token = localStorage.getItem('token');
-    const res = await fetch('http://localhost:5000/api/applications/stats', {
+    const res = await fetch('https://trackhire-r2ba.onrender.com/api/applications/stats', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const data = await res.json();
-    setStats(data.stats);
-    setTotal(data.total);
+    setStats(data.stats || []);
+    setTotal(data.total || 0);
   };
 
   const fetchApplications = async () => {
     const token = localStorage.getItem('token');
-    const res = await fetch('http://localhost:5000/api/applications', {
+    const res = await fetch('https://trackhire-r2ba.onrender.com/api/applications', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const data = await res.json();
-    setApplications(data);
+    setApplications(Array.isArray(data) ? data : []);
   };
 
   useEffect(() => {
@@ -38,41 +38,47 @@ export default function Dashboard() {
   };
 
   const statCards = [
-    { label: 'Total', value: Number(total), color: '#4f46e5' },
-    { label: 'Interviews', value: getCount('Interview'), color: '#8b5cf6' },
-    { label: 'Offers', value: getCount('Offer'), color: '#10b981' },
-    { label: 'Rejected', value: getCount('Rejected'), color: '#ef4444' },
+    { label: 'Total Applied', value: Number(total), color: '#4f46e5', bg: '#eff6ff', icon: '📨' },
+    { label: 'Interviews', value: getCount('Interview'), color: '#7c3aed', bg: '#f5f3ff', icon: '🎯' },
+    { label: 'Offers', value: getCount('Offer'), color: '#16a34a', bg: '#f0fdf4', icon: '🎉' },
+    { label: 'Rejected', value: getCount('Rejected'), color: '#dc2626', bg: '#fef2f2', icon: '❌' },
   ];
 
   const handleAdd = (app) => {
-    setApplications(function(prev) { return [app, ...prev]; });
+    setApplications(prev => [app, ...prev]);
     fetchStats();
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f2f5' }}>
+    <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
       <Navbar />
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1rem' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem' }}>
 
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          {statCards.map(function(stat) {
-            return (
-              <div key={stat.label} style={{
-                flex: '1', minWidth: '140px', background: '#fff',
-                borderRadius: '12px', padding: '1.25rem',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                borderTop: '4px solid ' + stat.color
-              }}>
-                <p style={{ margin: '0 0 0.5rem', color: '#666', fontSize: '0.9rem' }}>{stat.label}</p>
-                <p style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', color: stat.color }}>{stat.value}</p>
+        <div style={{ marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Dashboard</h1>
+          <p style={{ color: '#64748b' }}>Track and manage your job applications</p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          {statCards.map(stat => (
+            <div key={stat.label} style={{ background: '#fff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '48px', height: '48px', background: stat.bg, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', flexShrink: 0 }}>
+                {stat.icon}
               </div>
-            );
-          })}
+              <div>
+                <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500', marginBottom: '0.2rem' }}>{stat.label}</p>
+                <p style={{ fontSize: '1.75rem', fontWeight: '700', color: stat.color, lineHeight: 1 }}>{stat.value}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
         <ApplicationForm onAdd={handleAdd} />
 
-        <h3 style={{ marginTop: 0, marginBottom: '1rem', color: '#1a1a2e' }}>Your Applications</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#1e293b' }}>Your Applications</h2>
+          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{applications.length} total</span>
+        </div>
         <ApplicationTable applications={applications} setApplications={setApplications} onUpdate={fetchStats} />
 
       </div>
