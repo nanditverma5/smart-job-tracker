@@ -18,7 +18,9 @@ const noteRoutes = require('./routes/notes');
 console.log('noteRoutes type:', typeof noteRoutes);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 
 const start = async () => {
