@@ -52,8 +52,8 @@ export default function ApplicationForm({ onAdd }) {
           <label style={s.label}>Date Applied</label>
           <input style={s.input} type="date" value={date} onChange={e => setDate(e.target.value)} required />
         </div>
-        <button style={s.btn} type="submit" disabled={loading}>
-          {loading ? 'Adding...' : '+ Add Application'}
+        <button style={{...s.btn, opacity: loading ? 0.7 : 1}} type="submit" disabled={loading}>
+          {loading ? 'Adding...' : '+ Add'}
         </button>
       </form>
     </div>
@@ -61,11 +61,11 @@ export default function ApplicationForm({ onAdd }) {
 }
 
 const s = {
-  card: { background: '#fff', padding: '1.5rem', borderRadius: '16px', boxShadow: '0 1px 8px rgba(0,0,0,0.06)', marginBottom: '1.5rem', border: '1px solid #e2e8f0' },
-  title: { fontSize: '1rem', fontWeight: '600', color: '#1e293b', marginBottom: '1.25rem' },
+  card: { background: '#161b27', padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem', border: '1px solid #1e2433' },
+  title: { fontSize: '0.95rem', fontWeight: '600', color: '#e2e8f0', marginBottom: '1.25rem' },
   form: { display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' },
   field: { display: 'flex', flexDirection: 'column', flex: '1', minWidth: '150px' },
-  label: { fontSize: '0.8rem', fontWeight: '500', color: '#64748b', marginBottom: '0.4rem' },
-  input: { padding: '0.6rem 0.875rem', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', color: '#1e293b', outline: 'none' },
-  btn: { padding: '0.65rem 1.5rem', background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', height: '38px' }
+  label: { fontSize: '0.75rem', fontWeight: '500', color: '#64748b', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  input: { padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #2d3748', fontSize: '0.9rem', outline: 'none' },
+  btn: { padding: '0.65rem 1.5rem', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem', whiteSpace: 'nowrap', height: '38px' }
 };
